@@ -1,0 +1,67 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="T4\**" />
+    <EmbeddedResource Remove="T4\**" />
+    <None Remove="T4\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.1" />
+    <PackageReference Include="T4" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Light.Common\Light.Common.csproj" />
+    <ProjectReference Include="..\Light.IRepository\Light.IRepository.csproj" />
+    <ProjectReference Include="..\Light.Model\Light.Model.csproj" />
+    <ProjectReference Include="..\Light.Repository\Light.Repository.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="CtrlTemplate.cst">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CtrlTemplate.tt</DependentUpon>
+    </None>
+    <None Update="CtrlTemplate.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CtrlTemplate.cst</LastGenOutput>
+    </None>
+    <None Update="OracleModelGenerator.cst">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>OracleModelGenerator.tt</DependentUpon>
+    </None>
+    <None Update="OracleModelGenerator.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>OracleModelGenerator.cst</LastGenOutput>
+    </None>
+    <None Update="SQLiteModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="T4Ttinclude\SQLiteSingleModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SQLiteSingleModel.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="T4Ttinclude\SQLiteSingleModel.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SQLiteSingleModel.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

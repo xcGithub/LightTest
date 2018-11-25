@@ -1,0 +1,91 @@
+﻿<#@ template language="C#" debug="false" hostspecific="true"#>
+<#@ include file="$(SolutionDir)\Light.Common\T4\SQLiteHelper.ttinclude" #>
+<#@ include file="$(SolutionDir)\Light.Common\T4\SQLiteSchemaReader.ttinclude" #>
+<#@ include file="$(SolutionDir)\Light.Common\T4Ttinclude\Manager.ttinclude" #>
+<#@ include file="EF.Utility.CS.ttinclude"#> 
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Data" #>
+
+<#@ assembly name="$(SolutionDir)\Lib\sqlite\del\System.Data.SQLite.dll" #> 
+
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Collections.Generic" #> 
+<#@ import namespace="System.Data.SQLite" #>
+
+
+
+<#@ output extension=".cst" #>
+
+<# 
+	
+	var names = "";
+	IDataReader rdr = SQLitehelper.ExecuteReader("  select name from sqlite_master where type = 'table' ");
+	while (rdr.Read())
+	{
+		names += rdr["name"].ToString() + "==";
+	} 
+	
+	var manager = Manager.Create(Host, GenerationEnvironment); // 多文件生成
+	// SQLiteConnection conn = new SQLiteConnection(@"Data Source=E:\cc\test\QcfDataTest\SQLiteT4\bin\Debug\cater.db;");
+	// conn.Open();
+	// var cmd = conn.CreateCommand();
+	// cmd.CommandText =  " select name from sqlite_master where type = 'table' ";
+	// IDataReader rdr = cmd.ExecuteReader();
+	// var names = "";
+	// while (rdr.Read())
+	// {
+	// 	names += rdr["name"].ToString() + "==";
+	// } 
+
+
+#>
+//  <#= names#>
+
+<# manager.StartHeader(); #>
+using ApiCoreTest;
+using EFDbContext;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+
+namespace ApiCoreTest.Controllers
+{
+
+<# manager.EndBlock(); #>
+
+<#
+
+	//  assembly name="$(SolutionDir)\Lib\sqlite\Microsoft.Data.Sqlite.dll" 
+	// import namespace="Microsoft.Data.Sqlite" 
+    //获取项目的根目录
+    var solutionsPath = Host.ResolveAssemblyReference("$(SolutionDir)");  
+    //获取配置文件
+    var lines = System.IO.File.ReadAllLines(solutionsPath + @"/TestConsole/CtrlNames.txt");
+    foreach(var name in lines)
+    {
+		manager.StartNewFile(name +".cs"); // 新建文件
+	#>
+
+
+    public partial class <#= name#>Controller : Controller
+    {   
+        IOptions<ConfigModel> _config;
+        ILogger<<#= name#>Controller> _logger;
+        ApplicationDbContext _db;
+        public <#= name#>Controller(IOptions<ConfigModel> config, ILogger<<#= name#>Controller> logger, ApplicationDbContext db)
+        {
+            _config = config;
+            _logger = logger;
+            _db = db;
+        }
+    }
+	
+<# manager.StartFooter(); #>
+
+<#}#>
+
+<# manager.EndBlock(); #>
+<# manager.Process(true); #> 

@@ -1,0 +1,86 @@
+﻿<#@ template language="C#"  hostspecific="True" #>
+<#@ include file="EF.Utility.CS.ttinclude"#> 
+<#@ include file="$(SolutionDir)\Light.Common\T4Ttinclude\SQLiteTest1.ttinclude" #>
+<#@ assembly name="EnvDTE" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Data" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Configuration" #>
+<#@ assembly name="$(SolutionDir)\Lib\sqlite\del\System.Data.SQLite.dll" #> 
+
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Data.Common" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Configuration" #>
+<#@ import namespace="System.Data.SQLite" #>
+<#@ output extension=".cst"#>  
+
+<#
+/*
+This code is part of the Dapper.SimpleCRUD project
+It is based on the T4 template from the PetaPoco project which in turn is based on the subsonic project.
+ -----------------------------------------------------------------------------------------
+ This template can read minimal schema information from the following databases:
+
+	*  Oracle
+ -----------------------------------------------------------------------------------------
+*/
+	Namespace = TopNamespace + ".xModel";
+	 
+	EntityFrameworkTemplateFileManager fileManager = EntityFrameworkTemplateFileManager.Create(this); // 多文件生成
+/*
+	// Tweak Schema
+	tables["tablename"].Ignore = true;							// To ignore a table
+	tables["tablename"].ClassName = "newname";					// To change the class name of a table
+	tables["tablename"]["columnname"].Ignore = true;			// To ignore a column
+	tables["tablename"]["columnname"].PropertyName="newname";	// To change the property name of a column
+	tables["tablename"]["columnname"].PropertyType="bool";		// To change the property type of a column
+*/
+#>
+
+
+<# fileManager.StartHeader(); #>
+
+using System; 
+
+namespace <#=Namespace #>
+{
+
+<# fileManager.EndBlock(); #>
+
+
+<#
+foreach(Table tbl in from t in tables where !t.Ignore select t){
+		if(IsExcluded(tbl.Name, ExcludeTablePrefixes)) continue;
+		 
+		fileManager.StartNewFile(tbl.Name+".cs"); // 新建文件
+#>
+    /// <summary>
+    /// A class which represents the <#=tbl.Name#> <#=(tbl.IsView)?"view":"table"#>.
+    /// </summary> 
+	public partial class <#=tbl.ClassName#>
+	{
+	   /* <#foreach(Column col in from c in tbl.Columns where !c.Ignore select c) {#> <#=col.PropertyName #> <#}#> */ 
+
+<#foreach(Column col in from c in tbl.Columns where !c.Ignore select c)
+{#>
+	<# if (tbl.PK!=null && tbl.PK.Name==col.PropertyName) { #> 
+	<#}#>
+	public virtual <#=col.PropertyType #><#=CheckNullable(col)#> <#=col.PropertyName #> { get; set; }
+<#}#>
+	}
+
+<#}#>
+
+<# fileManager.StartFooter(); #>
+} // namespace
+<# fileManager.EndBlock(); #>
+<# fileManager.Process(true); #> 
+ 
+  

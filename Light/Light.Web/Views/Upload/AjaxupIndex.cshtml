@@ -1,0 +1,63 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "ajaxfileupload";
+}
+
+<tr>
+    <td>图片Url:</td>
+    <td>
+        @*<input class="easyui-textbox" type="text" name="imgUrl"
+            data-options="required:true,validType:'length[1,400]'" />*@
+
+        <input type="file" id="fltemp" name="file" />
+        <input id="btnFileUp" type="button" value="上传" />
+
+        <br />
+        <img id="imgPreview" alt=" " style="width:200px" />
+    </td>
+</tr>
+<link href="~/lib/layer/skin/default/layer.css" rel="stylesheet" />
+<script src="~/lib/jquery/jquery-1.8.3.js"></script>
+<script src="~/lib/ajaxfileupload/ajaxfileupload.js"></script>
+<script src="~/lib/layer/layer.js"></script>
+ <!-- 2、图片上传 -->
+<script type="text/javascript">
+            $(function () {
+                $("#btnFileUp").click(function () {
+
+                    if ($('#fltemp').val() == "") {
+                        layer.alert('请选择上传文件!', { icon: 6 });　　
+                        return;
+                    }
+
+                    //// 删除之前上传的图片
+                    //var src = $("#imgZoom").attr("src");
+                    //if (src != "" || src  != null) {
+                    //}
+
+                    $.ajaxFileUpload({
+                        url: '@Url.Action("AjaxFileupload", "Upload")', //用于文件上传的服务器端请求地址
+                        secureuri: false, //是否需要安全协议，一般设置为false
+                        fileElementId: 'fltemp', //文件上传域的ID
+                        dataType: 'json', //返回值类型 一般设置为json
+                        success: function (data, status) { //服务器成功响应处理函数
+                            if (data.state != 1) {
+                                $('#imgPreview').attr('src', '');
+                                layer.alert(data.msg, { icon: 6 });　　
+                                return;
+                            }
+                            $("#imgPreview").attr("src", data.imgurl); // 赋值图片
+                            //$.messager.alert('提示', data.msg);
+                        },
+                        error: function (data, status, e) { //服务器响应失败处理函数
+                            $('#imgPreview').attr('src', '');
+                            layer.alert("图片未能上传!", { icon: 6 });　
+                        }
+                    }); //ajaxfileup
+                }); // click
+
+            });
+
+</script>
+
+

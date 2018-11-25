@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\lib\ajaxfileupload\ajaxfileupload.js" />
+    <Content Include="wwwroot\lib\jquery\jquery-1.8.3.js" />
+    <Content Include="wwwroot\lib\layer\layer.js" />
+    <Content Include="wwwroot\lib\layer\mobile\layer.js" />
+    <Content Include="wwwroot\lib\layer\mobile\need\layer.css" />
+    <Content Include="wwwroot\lib\layer\skin\default\icon-ext.png" />
+    <Content Include="wwwroot\lib\layer\skin\default\icon.png" />
+    <Content Include="wwwroot\lib\layer\skin\default\layer.css" />
+    <Content Include="wwwroot\lib\layer\skin\default\loading-0.gif" />
+    <Content Include="wwwroot\lib\layer\skin\default\loading-1.gif" />
+    <Content Include="wwwroot\lib\layer\skin\default\loading-2.gif" />
+    <Content Include="wwwroot\lib\uploadify\Change Log.txt" />
+    <Content Include="wwwroot\lib\uploadify\check-exists.php" />
+    <Content Include="wwwroot\lib\uploadify\index.php" />
+    <Content Include="wwwroot\lib\uploadify\jquery.uploadify.js" />
+    <Content Include="wwwroot\lib\uploadify\jquery.uploadify.min.js" />
+    <Content Include="wwwroot\lib\uploadify\license.txt" />
+    <Content Include="wwwroot\lib\uploadify\uploadify-cancel.png" />
+    <Content Include="wwwroot\lib\uploadify\uploadify.css" />
+    <Content Include="wwwroot\lib\uploadify\uploadify.php" />
+    <Content Include="wwwroot\lib\uploadify\uploadify.swf" />
+    <Content Include="wwwroot\lib\uploadify\__MACOSX\._Change Log.txt" />
+    <Content Include="wwwroot\lib\uploadify\__MACOSX\._uploadify.swf" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Light.Common\Light.Common.csproj" />
+    <ProjectReference Include="..\Light.DependencyInjection\Light.DependencyInjection.csproj" />
+    <ProjectReference Include="..\Light.Model\Light.Model.csproj" />
+  </ItemGroup>
+
+</Project>
